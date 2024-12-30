@@ -22,6 +22,7 @@ pipeline {
                     repository: 'brettNel/test-jenkins-uploads',
                     tagName:  env.RELEASE_VERSION,
                     uploadAssets: [
+                        [filePath: 'missingfile.hex'],
                         [filePath: 'random_binary_file.bin'],
                         [filePath: 'small_txt_file.txt']
                     ]
