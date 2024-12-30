@@ -1,0 +1,1 @@
+this is a small text file to test uploading with the github release jenkins plugin
