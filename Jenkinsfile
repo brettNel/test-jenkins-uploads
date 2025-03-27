@@ -11,14 +11,14 @@ pipeline {
         stage('Publish') { 
             steps {
                 createGitHubRelease(
-                    credentialId: 'brettNel',
+                    credentialId: 'BrettNel',
                     repository: 'brettNel/test-jenkins-uploads',
                     commitish: 'main',
                     tag:  env.RELEASE_VERSION,
                     bodyText: 'testing publish',
                 )
                 uploadGithubReleaseAsset(
-                    credentialId: 'brettNel',
+                    credentialId: 'BrettNel',
                     repository: 'brettNel/test-jenkins-uploads',
                     tagName:  env.RELEASE_VERSION,
                     uploadAssets: [
