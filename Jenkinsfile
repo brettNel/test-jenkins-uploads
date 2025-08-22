@@ -22,8 +22,8 @@ pipeline {
                     repository: 'brettNel/test-jenkins-uploads',
                     tagName:  env.RELEASE_VERSION,
                     uploadAssets: [
-                        [filePath: '$WORKSPACE\\random_binary_file.bin'],
-                        [filePath: '$WORKSPACE\\small_txt_file.txt']
+                        [filePath: "${WORKSPACE}/random_binary_file.bin"],
+                        [filePath: "${WORKSPACE}/small_txt_file.txt"]
                     ]
                 )
             }
