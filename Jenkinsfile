@@ -30,6 +30,37 @@ pipeline {
             }
         }
 
+        stage('Publish - Overwrite') {
+            steps {
+                createGitHubRelease(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    commitish: 'main',
+                    tag: "${env.RELEASE_VERSION}-overwrite",
+                    bodyText: 'Testing overwrite: first upload.',
+                )
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-overwrite",
+                    uploadAssets: [
+                        [filePath: "${WORKSPACE}/random_binary_file.bin"],
+                        [filePath: "${WORKSPACE}/small_txt_file.txt"]
+                    ]
+                )
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-overwrite",
+                    uploadAssets: [
+                        [filePath: "${WORKSPACE}/random_binary_file.bin"],
+                        [filePath: "${WORKSPACE}/small_txt_file.txt"]
+                    ],
+                    overwrite: true
+                )
+            }
+        }
+
         stage('Publish - GitHub App') {
             steps {
                 createGitHubRelease(
