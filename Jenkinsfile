@@ -30,6 +30,28 @@ pipeline {
             }
         }
 
+        stage('Publish - Draft with Assets') {
+            steps {
+                createGitHubRelease(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    commitish: 'main',
+                    tag: "${env.RELEASE_VERSION}-draft",
+                    bodyText: 'Testing draft release asset upload.',
+                    draft: true,
+                )
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-draft",
+                    uploadAssets: [
+                        [filePath: "${WORKSPACE}/random_binary_file.bin"],
+                        [filePath: "${WORKSPACE}/small_txt_file.txt"]
+                    ]
+                )
+            }
+        }
+
         stage('Publish - Generate Release Notes') {
             steps {
                 createGitHubRelease(
