@@ -30,6 +30,18 @@ pipeline {
             }
         }
 
+        stage('Publish - Generate Release Notes') {
+            steps {
+                createGitHubRelease(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    commitish: 'main',
+                    tag: "${env.RELEASE_VERSION}-generated-notes",
+                    generateReleaseNotes: true,
+                )
+            }
+        }
+
         stage('Publish - Overwrite') {
             steps {
                 createGitHubRelease(
