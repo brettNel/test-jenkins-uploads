@@ -98,6 +98,18 @@ pipeline {
             }
         }
 
+        stage('Create Release - Existing Tag (expect failure)') {
+            steps {
+                createGitHubRelease(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    commitish: 'main',
+                    tag: "${env.RELEASE_VERSION}-pat",
+                    bodyText: 'This should fail - tag already exists.',
+                )
+            }
+        }
+
         stage('Publish - GitHub App') {
             steps {
                 createGitHubRelease(
