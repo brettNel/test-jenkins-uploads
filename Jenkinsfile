@@ -30,6 +30,36 @@ pipeline {
             }
         }
 
+        stage('Publish - Overwrite Assets') {
+            steps {
+                createGitHubRelease(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    commitish: 'main',
+                    tag: "${env.RELEASE_VERSION}-overwrite",
+                    bodyText: 'Testing asset overwrite.',
+                )
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-overwrite",
+                    uploadAssets: [
+                        [filePath: "${WORKSPACE}/small_txt_file.txt"]
+                    ]
+                )
+                // Upload again with overwrite: true — should replace the existing asset
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-overwrite",
+                    overwrite: true,
+                    uploadAssets: [
+                        [filePath: "${WORKSPACE}/small_txt_file.txt"]
+                    ]
+                )
+            }
+        }
+
         stage('Publish - Draft with Assets') {
             steps {
                 createGitHubRelease(
