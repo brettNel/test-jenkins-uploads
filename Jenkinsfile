@@ -23,7 +23,15 @@ pipeline {
                     repository: 'brettNel/test-jenkins-uploads',
                     tagName: "${env.RELEASE_VERSION}-pat",
                     uploadAssets: [
-                        [filePath: "${WORKSPACE}/random_binary_file.bin"],
+                        [filePath: "${WORKSPACE}/random_binary_file.bin"]
+                    ]
+                )
+                // Upload a second asset to the same existing release
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-pat",
+                    uploadAssets: [
                         [filePath: "${WORKSPACE}/small_txt_file.txt"]
                     ]
                 )
@@ -75,7 +83,15 @@ pipeline {
                     repository: 'brettNel/test-jenkins-uploads',
                     tagName: "${env.RELEASE_VERSION}-draft",
                     uploadAssets: [
-                        [filePath: "${WORKSPACE}/random_binary_file.bin"],
+                        [filePath: "${WORKSPACE}/random_binary_file.bin"]
+                    ]
+                )
+                // Upload a second asset to the same existing draft
+                uploadGithubReleaseAsset(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    tagName: "${env.RELEASE_VERSION}-draft",
+                    uploadAssets: [
                         [filePath: "${WORKSPACE}/small_txt_file.txt"]
                     ]
                 )
