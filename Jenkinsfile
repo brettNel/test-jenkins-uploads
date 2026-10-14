@@ -134,6 +134,29 @@ pipeline {
             }
         }
 
+        stage('Publish - Discussion Category') {
+            steps {
+                script {
+                    // Requires Discussions enabled on the repo with an 'Announcements' category
+                    def release = createGitHubRelease(
+                        credentialId: 'BrettNel2',
+                        repository: 'brettNel/test-jenkins-uploads',
+                        commitish: 'main',
+                        tag: "${env.RELEASE_VERSION}-category",
+                        bodyText: 'Testing discussion category.',
+                        categoryName: 'Announcements',
+                    )
+                    echo "Discussion: ${release.discussionUrl}"
+                    if (release.body != 'Testing discussion category.') {
+                        error("Expected body to be untouched by categoryName, got '${release.body}'")
+                    }
+                    if (!release.discussionUrl) {
+                        error('Expected a linked discussion')
+                    }
+                }
+            }
+        }
+
         stage('Publish - GitHub App') {
             steps {
                 createGitHubRelease(
