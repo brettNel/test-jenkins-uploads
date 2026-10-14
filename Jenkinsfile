@@ -134,18 +134,6 @@ pipeline {
             }
         }
 
-        stage('Create Release - Existing Tag (expect failure)') {
-            steps {
-                createGitHubRelease(
-                    credentialId: 'BrettNel2',
-                    repository: 'brettNel/test-jenkins-uploads',
-                    commitish: 'main',
-                    tag: "${env.RELEASE_VERSION}-pat",
-                    bodyText: 'This should fail - tag already exists.',
-                )
-            }
-        }
-
         stage('Publish - GitHub App') {
             steps {
                 createGitHubRelease(
@@ -163,6 +151,18 @@ pipeline {
                         [filePath: "${WORKSPACE}/random_binary_file.bin"],
                         [filePath: "${WORKSPACE}/small_txt_file.txt"]
                     ]
+                )
+            }
+        }
+
+        stage('Create Release - Existing Tag (expect failure)') {
+            steps {
+                createGitHubRelease(
+                    credentialId: 'BrettNel2',
+                    repository: 'brettNel/test-jenkins-uploads',
+                    commitish: 'main',
+                    tag: "${env.RELEASE_VERSION}-pat",
+                    bodyText: 'This should fail - tag already exists.',
                 )
             }
         }
