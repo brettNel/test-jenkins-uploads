@@ -98,6 +98,42 @@ pipeline {
             }
         }
 
+        stage('Publish - Generated Release Notes') {
+            steps {
+                script {
+                    def generated = createGitHubRelease(
+                        credentialId: 'BrettNel2',
+                        repository: 'brettNel/test-jenkins-uploads',
+                        commitish: 'main',
+                        tag: "${env.RELEASE_VERSION}-notes",
+                        generateReleaseNotes: true,
+                    )
+                    echo "Generated notes:\n${generated.body}"
+                    if (!generated.body?.trim()) {
+                        error('Expected GitHub to generate a release body')
+                    }
+                    if (generated.name != "${env.RELEASE_VERSION}-notes") {
+                        error("Expected release name to default to the tag, got '${generated.name}'")
+                    }
+
+                    // bodyText should be prepended to the generated notes
+                    def prepended = createGitHubRelease(
+                        credentialId: 'BrettNel2',
+                        repository: 'brettNel/test-jenkins-uploads',
+                        commitish: 'main',
+                        tag: "${env.RELEASE_VERSION}-notes-body",
+                        bodyText: 'Testing generated notes with bodyText.',
+                        generateReleaseNotes: true,
+                    )
+                    echo "Generated notes with bodyText:\n${prepended.body}"
+                    if (!prepended.body?.startsWith('Testing generated notes with bodyText.')
+                            || prepended.body.trim() == 'Testing generated notes with bodyText.') {
+                        error('Expected bodyText followed by generated notes')
+                    }
+                }
+            }
+        }
+
         stage('Create Release - Existing Tag (expect failure)') {
             steps {
                 createGitHubRelease(
